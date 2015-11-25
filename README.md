@@ -8,7 +8,10 @@ Proposal is here: https://drive.google.com/open?id=1vuIcVz8KHbXqyjY4PWqkA_2YfWaE
 
 ### Usage
 
-File `pedo_extract.m` takes a `lst` file and returns:
+File `pedo_extract.m` (Written by: Quinn Boser, July 2013) takes a `lst` file and returns:
 1. a 3d struct array with dimensions (x,y,time)
 2. a 2d max-pressure map with dimensions (x,y)
+
+
+
 
