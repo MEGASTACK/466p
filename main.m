@@ -29,16 +29,16 @@ function [ output_args ] = sophisticated_example( input_args )
 % This puts the data in a directory at ~/Datasets/iccv09Data/.
 % Now, start matlab. We begin with some parameter choices.
 
-imsdir = '~/Datasets/iccv09Data/images/'; % Change this to fit your system!
-labdir = '~/Datasets/iccv09Data/labels/'; % Change this to fit your system!
+imsdir = 'pb_data/'; % Change this to fit your system!
+labdir = 'labels_data/'; % Change this to fit your system!
 nvals  = 8;
 rez    = .2; % how much to reduce resolution
 rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
 % Now, we will load the data. In the backgrounds dataset, labels are stored as a text array of integers in the range 0-7, with negative values for unlabelled regions. JGMT uses 0 to represent unlabelled/hidden values, so we make this conversion when loading the data. Additionally, we reduce resolution to 20% after computing the features. This actually increases the accuracy of the final predictions, interpolated back to the original resolution.
-ims_names = dir([imsdir '*.jpg']);
-lab_names = dir([labdir '*regions.txt']);
+ims_names = dir([imsdir '*.lst']);
+lab_names = dir([labdir '*mat']);
 N = length(ims_names);
 ims    = cell(N,1);
 labels = cell(N,1);
@@ -46,7 +46,7 @@ labels = cell(N,1);
 fprintf('loading data and computing feature maps...\n');
 parfor n=1:N
     % load data
-    lab = importdata([labdir lab_names(n).name]);
+    lab = importdata([labdir lab_names(n).name]);    
     im  = double(imread(([imsdir ims_names(n).name])))/255;
     ims{n}  = im;
     labels0{n} = max(0,lab+1);
