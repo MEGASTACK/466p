@@ -7,6 +7,9 @@ function [L b_ij b_i dtheta_ij dtheta_i] = trw_bprop_scheduled_fast(model,theta_
 % loss is a function object that will be called like so:
 % [L db_i db_ij] = loss(b_i, b_ij);
 
+ti = size(theta_i)
+nva = model.nvals
+nno = model.nnodes
 if sum(size(theta_i) ~= [model.nvals model.nnodes])
     error('theta_i should have size [model.nvals model.nnodes]');
 end

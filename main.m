@@ -31,8 +31,8 @@ function [ output_args ] = sophisticated_example( input_args )
 
 imsdir = 'pb_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
-nvals  = 2;
-rez    = .2; % how much to reduce resolution
+nvals  = 571;
+rez    = 1; % how much to reduce resolution
 rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
@@ -92,19 +92,37 @@ fprintf('splitting data into a training and a test set...\n')
 k = 1;
 [who_train who_test] = kfold_sets(N,5,k);
 
-ims_train     = ims(who_train);
-feats_train   = feats(who_train);
-efeats_train  = efeats(who_train);
-labels_train  = labels(who_train);
-labels0_train = labels0(who_train);
-models_train  = models(who_train);
+% ims_train     = ims(who_train);
+% feats_train   = feats(who_train);
+% efeats_train  = efeats(who_train);
+% labels_train  = labels(who_train);
+% labels0_train = labels0(who_train);
+% models_train  = models(who_train);
 
-ims_test     = ims(who_test);
-feats_test   = feats(who_test);
-efeats_test  = efeats(who_test);
-labels_test  = labels(who_test);
-labels0_test = labels0(who_test);
-models_test  = models(who_test);
+% ims_test     = ims(who_test);
+% feats_test   = feats(who_test);
+% efeats_test  = efeats(who_test);
+% labels_test  = labels(who_test);
+% labels0_test = labels0(who_test);
+% models_test  = models(who_test);
+
+
+ims_test     = ims;
+feats_test   = feats;
+efeats_test  = efeats;
+labels_test  = labels;
+labels0_test = labels0;
+models_test  = models;
+
+
+ims_train     = ims_test;
+feats_train   = feats_test;
+efeats_train  = efeats_test;
+labels_train  = labels_test;
+labels0_train = labels0_test;
+models_train  = models_test;
+
+
 % Again we make a visualization function. This takes a cell array of predicted beliefs as input, and shows them to the screen during training. This is totally optional, but very useful if you want to understand what is happening in your training run.
     % visualization function
     function viz(b_i)
@@ -124,8 +142,8 @@ models_test  = models(who_test);
 loss_spec = 'trunc_cl_trwpll_5';
 % Finally, we actually train the model. This takes about an hour and a half on an 8-core machine. You should have at least 4-8GB of memory.
 p = gcp;
-delete(p);
-parpool local
+% delete(p);
+% parpool local
 
 fprintf('training the model (this is slow!)...\n')
 crf_type  = 'linear_linear';
