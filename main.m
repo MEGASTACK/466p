@@ -38,7 +38,7 @@ rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propa
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
 % Now, we will load the data. In the backgrounds dataset, labels are stored as a text array of integers in the range 0-7, with negative values for unlabelled regions. JGMT uses 0 to represent unlabelled/hidden values, so we make this conversion when loading the data. Additionally, we reduce resolution to 20% after computing the features. This actually increases the accuracy of the final predictions, interpolated back to the original resolution.
 ims_names = dir([imsdir '*.lst']);
-lab_names = dir([labdir '*mat']);
+lab_names = dir([labdir '*.mat']);
 N = length(ims_names);
 ims    = cell(N,1);
 labels = cell(N,1);
@@ -47,7 +47,10 @@ fprintf('loading data and computing feature maps...\n');
 parfor n=1:N
     % load data
     lab = importdata([labdir lab_names(n).name]);    
-    im  = double(imread(([imsdir ims_names(n).name])))/255;
+%     im  = double(imread(([imsdir ims_names(n).name])))/255;
+    im = importda
+    
+    
     ims{n}  = im;
     labels0{n} = max(0,lab+1);
 
@@ -120,7 +123,7 @@ models_test  = models(who_test);
 % Now, we choose what learning method to use. Here, we choose truncated fitting with the clique logistic loss. We use 5 iterations of TRW inference. Here, we use 'trwpll' to indicate to use the multithreaded TRW code. You will probably have to call 'compile_openmp' to make this work. Otherwise, you could just switch to 'trunc_cl_trw_5', which uses the non-parallel code.
 loss_spec = 'trunc_cl_trwpll_5';
 % Finally, we actually train the model. This takes about an hour and a half on an 8-core machine. You should have at least 4-8GB of memory.
-matlabpool 8
+parpool 8
 
 fprintf('training the model (this is slow!)...\n')
 crf_type  = 'linear_linear';
