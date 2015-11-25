@@ -17,7 +17,7 @@ crf_type = 'linear_linear';
 N     = 1;  % number of training images
 siz   = 50; % size of training images
 rho   = .5; % TRW edge appearance probability
-nvals = 2;  % this problem is binary
+nvals = 2;  % this problem is binary (switch me)..
 
 
 addpath JustinsGraphicalModelsToolboxPublic
@@ -82,22 +82,34 @@ end
 
 fprintf('splitting data into a training and a test set...\n')
 k = 1;
-[who_train who_test] = kfold_sets(N,5,k);
+% [who_train who_test] = kfold_sets(N,5,k);
+% 
+% ims_train     = ims(who_train);
+% feats_train   = feats(who_train);
+% efeats_train  = efeats(who_train);
+% labels_train  = labels(who_train);
+% labels0_train = labels0(who_train);
+% models_train  = models(who_train);
+% 
+% ims_test     = ims(who_test);
+% feats_test   = feats(who_test);
+% efeats_test  = efeats(who_test);
+% labels_test  = labels(who_test);
+% labels0_test = labels0(who_test);
+% models_test  = models(who_test);
 
-ims_train     = ims(who_train);
-feats_train   = feats(who_train);
-efeats_train  = efeats(who_train);
-labels_train  = labels(who_train);
-labels0_train = labels0(who_train);
-models_train  = models(who_train);
-
-ims_test     = ims(who_test);
-feats_test   = feats(who_test);
-efeats_test  = efeats(who_test);
-labels_test  = labels(who_test);
-labels0_test = labels0(who_test);
-models_test  = models(who_test);
-
+ims_train = ims;
+ims_test = ims;
+feats_train = feats;
+feats_test = feats;
+efeats_train = efeats;
+efeats_test = efeats;
+labels_train = labels;
+labels_test = labels;
+labels0_train = labels0;
+labels0_test = labels0;
+models_train = models;
+models_test = models;
 
 
     % visualization function
