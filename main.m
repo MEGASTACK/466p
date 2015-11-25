@@ -8,6 +8,18 @@ function [ output_args ] = main( dat_path )
 [~, max_press] = pedo_extract(dat_path);
 
 
+efeats = [];
+labels = [];
+models = [];
+loss_spec = [];
+crf_type = 'linear_linear';
+
+N     = 1;  % number of training images
+siz   = 50; % size of training images
+rho   = .5; % TRW edge appearance probability
+nvals = 2;  % this problem is binary
+
+
 addpath JustinsGraphicalModelsToolboxPublic
 
 % HOW TO: http://users.cecs.anu.edu.au/~jdomke/JGMT/
@@ -43,15 +55,68 @@ for n=1:N
     feats{n} = reshape(feats{n},ly*lx,lz);
 end
 
+model_hash = repmat({[]},1000,1000);
+fprintf('building models...\n')
+for n=1:N
+    [ly lx lz] = size(ims{n});
+    if isempty(model_hash{ly,lx});
+        model_hash{ly,lx} = gridmodel(ly,lx,nvals);
+    end
+end
+models = cell(N,1);
+for n=1:N
+    [ly lx lz] = size(ims{n});
+    models{n} = model_hash{ly,lx};
+end
 
 
-efeats = [];
-labels = [];
-models = [];
-loss_spec = [];
-crf_type = 'linear_linear';
 
-rho = 0;
+edge_params = {{'const'},{'diffthresh'},{'pairtypes'}};
+fprintf('computing edge features...\n')
+efeats = cell(N,1);
+parfor n=1:N
+    efeats{n} = edgeify_im(ims{n},edge_params,models{n}.pairs,models{n}.pairtype);
+end
+
+
+
+fprintf('splitting data into a training and a test set...\n')
+k = 1;
+[who_train who_test] = kfold_sets(N,5,k);
+
+ims_train     = ims(who_train);
+feats_train   = feats(who_train);
+efeats_train  = efeats(who_train);
+labels_train  = labels(who_train);
+labels0_train = labels0(who_train);
+models_train  = models(who_train);
+
+ims_test     = ims(who_test);
+feats_test   = feats(who_test);
+efeats_test  = efeats(who_test);
+labels_test  = labels(who_test);
+labels0_test = labels0(who_test);
+models_test  = models(who_test);
+
+
+
+    % visualization function
+    function viz(b_i)
+        % here, b_i is a cell array of size nvals x nvars
+        M = 5;
+        for n=1:M
+            [ly lx lz] = size(ims_train{n});
+            subplot(3,M,n    ); miximshow(reshape(b_i{n}',ly,lx,nvals),nvals);
+            subplot(3,M,n+  M); imshow(ims_train{n})
+            subplot(3,M,n+2*M); miximshow(reshape(labels_train{n},ly,lx),nvals);
+
+        end
+        xlabel('top: marginals  middle: input  bottom: labels')
+        drawnow
+    end
+
+loss_spec = 'trunc_cl_trwpll_5';
+
 
 options.viz         = @viz;
 options.print_times = 0; % since this is so slow, print stuff to screen
