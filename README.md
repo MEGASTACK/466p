@@ -13,9 +13,16 @@ File `main.m`
 ### Files, Directories
 
 Directory `pb_data` contains pedobarograph (pressure pad) data.
-- Each `lst` file represents one reading of a single footstep on the pedobarograph. It is read using `pedo_extract.m`.
+
+- Each `.lst` file represents one reading of a single footstep on the pedobarograph. It is read using `pedo_extract.m`.
+
+Directory `labels_data` contains labeled matrices.
+
+- Each `.mat` file is a labelled matrix corresponding to the max-pressure map of the `.lst` file with the same id, eg `pb_data/2651.lst` corresponds to `labels_data/2651.mat`.
+- The labelled matrix contains 1s for the great toe, 2s for the lateral forefoot, 3s for the medial forefoot, 4s for the heel, and 0s for all other entries.
 
 File `pedo_extract.m` (Written by: Quinn Boser, July 2013) takes a `lst` file and returns
+
 1. a 3d struct array with dimensions (x,y,time)
 2. a 2d max-pressure map with dimensions (x,y)
 3. the length of the x dimension
