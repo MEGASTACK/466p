@@ -31,7 +31,7 @@ function [ output_args ] = sophisticated_example( input_args )
 
 imsdir = 'pb_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
-nvals  = 8;
+nvals  = 2;
 rez    = .2; % how much to reduce resolution
 rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
@@ -48,7 +48,7 @@ parfor n=1:N
     % load data
     lab = importdata([labdir lab_names(n).name]);    
 %     im  = double(imread(([imsdir ims_names(n).name])))/255;
-    im = importda
+    im = lab/255.;
     
     
     ims{n}  = im;
@@ -123,7 +123,9 @@ models_test  = models(who_test);
 % Now, we choose what learning method to use. Here, we choose truncated fitting with the clique logistic loss. We use 5 iterations of TRW inference. Here, we use 'trwpll' to indicate to use the multithreaded TRW code. You will probably have to call 'compile_openmp' to make this work. Otherwise, you could just switch to 'trunc_cl_trw_5', which uses the non-parallel code.
 loss_spec = 'trunc_cl_trwpll_5';
 % Finally, we actually train the model. This takes about an hour and a half on an 8-core machine. You should have at least 4-8GB of memory.
-parpool 8
+p = gcp;
+delete(p);
+parpool local
 
 fprintf('training the model (this is slow!)...\n')
 crf_type  = 'linear_linear';
