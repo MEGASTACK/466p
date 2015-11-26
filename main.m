@@ -1,4 +1,4 @@
-function [ output_args ] = sophisticated_example( input_args )
+function [ output_args ] = main( input_args )
 %SOPHISTICATED_EXAMPLE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -31,8 +31,8 @@ function [ output_args ] = sophisticated_example( input_args )
 
 imsdir = 'pb_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
-nvals  = 571;
-rez    = 1; % how much to reduce resolution
+nvals  = 481;
+rez    = 0.4; % how much to reduce resolution
 rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
@@ -127,7 +127,7 @@ models_train  = models_test;
     % visualization function
     function viz(b_i)
         % here, b_i is a cell array of size nvals x nvars
-        M = 5;
+        M = 2; % 5
         for n=1:M
             [ly lx lz] = size(ims_train{n});
             subplot(3,M,n    ); miximshow(reshape(b_i{n}',ly,lx,nvals),nvals);
@@ -150,7 +150,7 @@ crf_type  = 'linear_linear';
 options.viz         = @viz;
 options.print_times = 0; % since this is so slow, print stuff to screen
 options.gradual     = 1; % use gradual fitting
-options.maxiter     = 1000;
+options.maxiter     = 20;
 options.rho         = rho;
 options.reg         = 1e-4;
 options.opt_display = 0;
