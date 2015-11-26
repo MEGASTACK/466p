@@ -8,7 +8,7 @@ Proposal is here: https://drive.google.com/open?id=1vuIcVz8KHbXqyjY4PWqkA_2YfWaE
 
 ### Usage
 
-File `main.m`
+File `main.m` will eventually be the entry point for the application. It currently is a copy of `sophisticated_example.m`.
 
 ### Files, Directories
 
@@ -28,6 +28,10 @@ File `pedo_extract.m` (Written by: Quinn Boser, July 2013) takes a `lst` file an
 3. the length of the x dimension
 4. the length of the y dimension
 5. the length of the time dimension
+
+File `pedo_format.txt` describes the format of an `.lst` file. It is used by `pedo_extract.m`.
+
+File `get_params.m` reads the number of rows, columns, and frames from an `.lst` file, where frames is the length of the time dimension. It is used by `pedo_extract.m`.
 
 File `JaccardScore.m` takes 2 matrices, A and B, and returns their Jaccard Score.
 
