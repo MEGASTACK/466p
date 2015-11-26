@@ -31,8 +31,8 @@ function [ output_args ] = main( input_args )
 
 imsdir = 'pb_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
-nvals  = 481;
-rez    = 0.4; % how much to reduce resolution
+nvals  = 7;
+rez    = 1; % how much to reduce resolution
 rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
@@ -46,9 +46,18 @@ labels = cell(N,1);
 fprintf('loading data and computing feature maps...\n');
 parfor n=1:N
     % load data
-    lab = importdata([labdir lab_names(n).name]);    
+    lab = importdata([labdir lab_names(n).name]);
+    
+%     lab = pedo_extract([labdir lab_names(n).name]);
 %     im  = double(imread(([imsdir ims_names(n).name])))/255;
-    im = lab/255.;
+
+    path = sprintf('%s/%s', imsdir, ims_names(n).name);
+
+    [~,im] = pedo_extract(path);
+    
+    im = im/255;
+
+% %     im = double(lab)/255.;
     
     
     ims{n}  = im;
@@ -150,7 +159,7 @@ crf_type  = 'linear_linear';
 options.viz         = @viz;
 options.print_times = 0; % since this is so slow, print stuff to screen
 options.gradual     = 1; % use gradual fitting
-options.maxiter     = 20;
+options.maxiter     = 200;
 options.rho         = rho;
 options.reg         = 1e-4;
 options.opt_display = 0;
