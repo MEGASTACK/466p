@@ -10,10 +10,17 @@ def main():
 	xmax,ymax = im.size
 	for x in range(xmax):
 		for y in range(ymax):
-			r,g,b = im.getpixel((x,y))
-			if not (pretty_dark(r,g,b) or greenish(r,g,b)):
+			if should_clear_pixel((x,y), im.getpixel((x,y))):
 				immask.putpixel((x,y), (255,255,255))
 	immask.show() # for testing
+
+def should_clear_pixel(xy, rgb):
+	x,y = xy
+	r,g,b = rgb
+	return (not pretty_dark(r,g,b) 
+		and not greenish(r,g,b)
+		and x > 15
+		and y > 17)
 
 def pretty_dark(r,g,b):
 	return (30 < r + g + b < 130)
