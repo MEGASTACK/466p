@@ -33,7 +33,7 @@ imsdir = 'pb_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
 nvals  = 7;
 rez    = 1; % how much to reduce resolution
-rho    = .5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
+rho    = 0.5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief propagation)
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
 % Now, we will load the data. In the backgrounds dataset, labels are stored as a text array of integers in the range 0-7, with negative values for unlabelled regions. JGMT uses 0 to represent unlabelled/hidden values, so we make this conversion when loading the data. Additionally, we reduce resolution to 20% after computing the features. This actually increases the accuracy of the final predictions, interpolated back to the original resolution.
@@ -159,7 +159,7 @@ crf_type  = 'linear_linear';
 options.viz         = @viz;
 options.print_times = 0; % since this is so slow, print stuff to screen
 options.gradual     = 1; % use gradual fitting
-options.maxiter     = 200;
+options.maxiter     = 1000;
 options.rho         = rho;
 options.reg         = 1e-4;
 options.opt_display = 0;
