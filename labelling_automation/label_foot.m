@@ -40,6 +40,7 @@ function label_foot( np_and_number, foot_number )%, output_filename )
         error_should_exit = true;
     end
     if error_should_exit
+        fprintf('Exiting.\n');
         return
     end
     fprintf(['\n']); % separate IO output from rest of program outpu
@@ -136,9 +137,7 @@ function label_foot( np_and_number, foot_number )%, output_filename )
     foot_right = foot_left + foot_width;
     foot_bottom = foot_top + foot_height;
     block_width = foot_width / lst_cols;
-    half_block_width = block_width / 2;
     block_height = foot_height / lst_rows;
-    half_block_height = block_height / 2;
     
     % initialize the output file
     out_mat = zeros(lst_rows, lst_cols);
@@ -168,6 +167,7 @@ function label_foot( np_and_number, foot_number )%, output_filename )
     if (length(lst_collist)+1 ~= length(foot_pixel_collist))
         fprintf('Footstep file dimensions and bounding rectangle dimensions don''t match\n');
         fprintf('Exiting.\n');
+        return;
     end
     
     %%
