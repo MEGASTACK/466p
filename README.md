@@ -6,10 +6,24 @@ Google Drive folder is here: https://drive.google.com/open?id=0B2WhXU_IjE68cjlmM
 
 Proposal is here: https://drive.google.com/open?id=1vuIcVz8KHbXqyjY4PWqkA_2YfWaEg1bcKuxf7oa9vcg
 
-### Usage
+### Conditional Random Field training
 
-File `main.m` will eventually be the entry point for the application. It 
-currently is a copy of `sophisticated_example.m`.
+File `main.m` trains a Conditional Random Field (CRF) model. It is heavily based off of `sophisticated_example.m`.
+
+Setup:
+
+1. Download JustinsGraphicalModelToolbox from the Google Drive, or from Slack. 
+Unzip it and move it into the root of the project. The folder "JustinsGraphicalModelToolboxPublic" should be
+in the same folder as this README.
+2. Rename `JustinsGraphicalModelsToolboxPublic/External/toolbox/external/other/savefig.m` to
+`JustinsGraphicalModelsToolboxPublic/External/toolbox/external/other/savefig_m.m`. We rename it
+because it has the same name as a MATLAB builtin and causes problems.
+3. Add the graphical model toolbox to MATLAB's path, recursively. Do this by
+running `>> addpath(genpath('JustinsGraphicalModelsToolboxPublic'));` in MATLAB.
+
+Train:
+
+1. In MATLAB, run `>> main`.
 
 ### Semi-Automated Foot Labelling
 
