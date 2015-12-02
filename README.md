@@ -8,18 +8,50 @@ Proposal is here: https://drive.google.com/open?id=1vuIcVz8KHbXqyjY4PWqkA_2YfWaE
 
 ### Usage
 
-File `main.m` will eventually be the entry point for the application. It currently is a copy of `sophisticated_example.m`.
+File `main.m` will eventually be the entry point for the application. It 
+currently is a copy of `sophisticated_example.m`.
+
+### Semi-Automated Foot Labelling
+
+File `labelling_automation/label_foot.m` is a function which will guide you 
+through converting an image of a labelled foot into proper labelled foot data
+which the system can consume in model training.
+
+The paths are hardcoded. It must be run from within `labelling_automation`.
+
+Example: labeling FinalData/NP40/3108
+
+```
+>> cd labelling_automation
+>> label_foot('NP40', '3108'`)
+```
+
+In this case, the files `FinalData/NP40/3108.jpg` and `FinalData/NP40/3108.lst` must exist.
+The jpg file is an image of an expert-segmented image, and the lst file is the footstep data
+file for the given image.
+
+The first step shows a picture of the labelled foot and instructs the user
+to resize a rectangle to fit the outline of the colored squares. Each step after that
+shows a picture of the labelled foot and instructs the user to trace one labelled region.
+
+The region mask is then converted from pixel-coordinates to .lst-file coordinates and
+the result is written to a .mat file in `labels_data`.
+
+It also moves the matching .lst file to `training_test_data`.
 
 ### Files, Directories
 
-Directory `pb_data` contains pedobarograph (pressure pad) data.
+Directory `training_test_data` contains pedobarograph (pressure pad) data.
 
-- Each `.lst` file represents one reading of a single footstep on the pedobarograph. It is read using `pedo_extract.m`.
+- Each `.lst` file represents one reading of a single footstep on the pedobarograph. 
+It is read using `pedo_extract.m`.
 
 Directory `labels_data` contains labeled matrices.
 
-- Each `.mat` file is a labelled matrix corresponding to the max-pressure map of the `.lst` file with the same id, eg `pb_data/2651.lst` corresponds to `labels_data/2651.mat`.
-- The labelled matrix contains 1s for the great toe, 2s for the lateral forefoot, 3s for the medial forefoot, 4s for the heel, and 0s for all other entries.
+- Each `.mat` file is a labelled matrix corresponding to the max-pressure map 
+of the `.lst` file with the same id, eg `pb_data/NP10_2651.lst` corresponds to `labels_data/NP10_2651.mat`.
+- The labelled matrix contains 1s for the great toe, 2s for the lateral forefoot, 
+3s for the medial forefoot, 4s for the heel, and 0s for all other entries.
 
 File `pedo_extract.m` (Written by: Quinn Boser, July 2013) takes a `lst` file and returns
 
