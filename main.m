@@ -37,8 +37,7 @@ rho    = 0.5; % (1 = loopy belief propagation) (.5 = tree-reweighted belief prop
 % Next, we need to choose what features will be used. Here, we choose to use the RGB intensities, and position, jointly Fourier expanded, plus a histogram of Gaussians, computed using Piotr Dollar's toolbox.
 feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
 % Now, we will load the data. In the backgrounds dataset, labels are stored as a text array of integers in the range 0-7, with negative values for unlabelled regions. JGMT uses 0 to represent unlabelled/hidden values, so we make this conversion when loading the data. Additionally, we reduce resolution to 20% after computing the features. This actually increases the accuracy of the final predictions, interpolated back to the original resolution.
-ims_names = dir([imsdir '*.lst']);
-lab_names = dir([labdir '*.mat']);
+[ims_names, lab_names] = select_data(imsdir, labdir, 'one');
 
 
 N = length(ims_names);
@@ -101,7 +100,7 @@ end
 % Next up, we split the data into a training set (80%) and a test set (20%).
 fprintf('splitting data into a training and a test set...\n')
 k = 5;
-[who_train who_test] = kfold_sets(N,5,k);
+[who_train, who_test] = kfold_sets(N,5,k);
 
 ims_train     = ims(who_train);
 feats_train   = feats(who_train);
@@ -207,7 +206,7 @@ for n=1:length(feats_test)
     subplot(2,3,6)
     miximshow(reshape(labels0_test{n},ly,lx),nvals);
     drawnow
-    savefig(sprintf('results/classify_%d', n));
+    savefig(sprintf('results/classify_%d_.fig', n));
 end
 fprintf('total pixelwise error on test data: %f \n', sum(E)/sum(T))
 
