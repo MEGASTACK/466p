@@ -33,6 +33,8 @@ which the system can consume in model training.
 
 The paths are hardcoded. It must be run from within `labelling_automation`.
 
+![foot labelling tool screencast](README-resources/3x-labelling-tool.gif)
+
 Example: labeling FinalData/NP40/3108
 
 ```
