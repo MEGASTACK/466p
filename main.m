@@ -29,7 +29,7 @@ function [ output_args ] = main( input_args )
 % This puts the data in a directory at ~/Datasets/iccv09Data/.
 % Now, start matlab. We begin with some parameter choices.
 
-imsdir = 'pb_data/'; % Change this to fit your system!
+imsdir = 'train_test_data/'; % Change this to fit your system!
 labdir = 'labels_data/'; % Change this to fit your system!
 nvals  = 5;
 rez    = 1; % how much to reduce resolution
@@ -39,6 +39,8 @@ feat_params = {{'patches',0},{'position',1},{'fourier',1},{'hog',8}};
 % Now, we will load the data. In the backgrounds dataset, labels are stored as a text array of integers in the range 0-7, with negative values for unlabelled regions. JGMT uses 0 to represent unlabelled/hidden values, so we make this conversion when loading the data. Additionally, we reduce resolution to 20% after computing the features. This actually increases the accuracy of the final predictions, interpolated back to the original resolution.
 ims_names = dir([imsdir '*.lst']);
 lab_names = dir([labdir '*.mat']);
+
+
 N = length(ims_names);
 ims    = cell(N,1);
 labels = cell(N,1);
@@ -205,6 +207,7 @@ for n=1:length(feats_test)
     subplot(2,3,6)
     miximshow(reshape(labels0_test{n},ly,lx),nvals);
     drawnow
+    savefig(sprintf('results/classify_%d', n));
 end
 fprintf('total pixelwise error on test data: %f \n', sum(E)/sum(T))
 
